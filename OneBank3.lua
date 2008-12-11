@@ -33,7 +33,7 @@ function OneBank3:OnInitialize()
 		local UpdateBag = function(event, bag) 
 			-- This is a work around of the fact that bank slots work different than all other slots.
 			if event == 'PLAYERBANKSLOTS_CHANGED' then
-				if ( slot <= NUM_BANKGENERIC_SLOTS ) then
+				if ( bag <= NUM_BANKGENERIC_SLOTS ) then
 					bag = -1
 				end
 			end
