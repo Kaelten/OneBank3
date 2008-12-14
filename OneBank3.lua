@@ -35,8 +35,9 @@ function OneBank3:OnInitialize()
 				if 	( bag <= NUM_BANKGENERIC_SLOTS ) then
 					BankFrameItemButton_Update(self.frame.slots["-1:"..bag])
 				else
-					BankFrameItemButton_Update(self.sidebar.buttons[bag-NUM_BANKGENERIC_SLOTS]);
+					BankFrameItemButton_Update(self.sidebar.buttons[bag	-NUM_BANKGENERIC_SLOTS]);
 				end
+				return
 			end
 			
 			self:UpdateBag(bag)
@@ -44,8 +45,10 @@ function OneBank3:OnInitialize()
 		
 		self:RegisterEvent("BAG_UPDATE", UpdateBag)
 		self:RegisterEvent("BAG_UPDATE_COOLDOWN", UpdateBag)
-		
 		self:RegisterEvent("PLAYERBANKSLOTS_CHANGED", UpdateBag)
+		
+		self:RegisterEvent("PLAYER_MONEY", "UpdateBagSlotStatus")
+		self:RegisterEvent("PLAYERBANKBAGSLOTS_CHANGED", "UpdateBagSlotStatus")		
 		
 		self.frame.name:SetText(UnitName("player").."'s Bank Bags")
 		
@@ -67,9 +70,10 @@ function OneBank3:OnInitialize()
 	self.frame.sidebar = self.sidebar
 	
 	self.sidebar:CustomizeFrame(self.db.profile)
-	self.sidebar:SetHeight(4 * self.rowHeight + self.bottomBorder + self.topBorder) 
+	self.sidebar:SetHeight(4 * self.rowHeight + self.bottomBorder + self.topBorder - 7) 
 	self.sidebar:SetWidth(2 * self.colWidth + self.leftBorder + self.rightBorder)
 	
+	self.sidebar:Hide()
 	
 	self.sidebar:SetScript("OnShow", function()
 		if not self.sidebar.buttons then
@@ -103,7 +107,43 @@ function OneBank3:OnInitialize()
 		self:UpdateBagSlotStatus()
 	end)
 	
-	self.sidebar:Hide()
+	self.sidebar:SetScript("OnHide", function()
+		self.purchase:Hide()
+	end)
+	
+	self.purchase = OneCore3:BuildBaseFrame('OneBankPurchaseFrame')
+	self.purchase.handler = self
+	
+	self.purchase:CustomizeFrame(self.db.profile)
+	self.purchase:SetSize(self.sidebar:GetWidth(), 50)
+	
+	self.purchase:ClearAllPoints()
+	self.purchase:SetPoint("TOP", self.sidebar, "BOTTOM", 0, 2)
+	
+	self.purchase.label = OneCore3:BuildFontString(self.purchase, nil, 11)
+	self.purchase.label:SetWidth(30)
+	self.purchase.label:SetText(COSTS_LABEL)
+	
+	self.purchase.label:ClearAllPoints()
+	self.purchase.label:SetPoint("TOPLEFT", self.purchase, "TOPLEFT", 12, -7)
+	
+	self.purchase.cost = OneCore3:BuildSmallMoneyFrame("MoneyFrame", self.purchase)
+	self.purchase.cost:SetPoint("LEFT", self.purchase.label, "RIGHT", 6, 0)
+	MoneyFrame_SetType(self.purchase.cost, "STATIC")
+	
+	self.purchase.button = CreateFrame('Button', nil, self.purchase, "UIPanelButtonTemplate")
+	self.purchase.button:SetHeight(20)
+	self.purchase.button:SetWidth(77)
+	
+	self.purchase.button:SetText(BANKSLOTPURCHASE)
+	self.purchase.button:SetPoint("TOPLEFT", self.purchase, "TOPLEFT", 7, -22)
+	
+	self.purchase.button:SetScript("OnClick", function()
+		PlaySound("igMainMenuOption")
+		StaticPopup_Show("CONFIRM_BUY_BANK_SLOT")
+	end)
+	
+	self.purchase:Hide()
 	
 	self:InitializeConfiguration()
 	self:EnablePlugins()
@@ -213,15 +253,9 @@ function OneBank3:GetBagButton(bag, parent)
 end
 
 function OneBank3:UpdateBagSlotStatus() 
-	--[[
-	local purchaseFrame = OBBBagFraPurchaseInfo
-	if( purchaseFrame == nil ) then
-		return
-	end
-	]]
-	
 	local numSlots,full = GetNumBankSlots()
 	local button
+
 	for i=1, NUM_BANKBAGSLOTS, 1 do
 		button = self.sidebar.buttons[i]
 		if ( button ) then
@@ -234,23 +268,22 @@ function OneBank3:UpdateBagSlotStatus()
 			end
 		end
 	end
-	--[[
-	-- pass in # of current slots, returns cost of next slot
+	
+	if full or not self.sidebar:IsVisible() then
+		return self.purchase:Hide()
+	else
+		self.purchase:Show()
+	end
+	
 	local cost = GetBankSlotCost(numSlots)
-	BankFrame.nextSlotCost = cost
+	BankFrame.nextSlotCost = cost -- Updated because of the confirmation dialog uses it.
+	MoneyFrame_Update(self.purchase.cost, cost)
+	
 	if( GetMoney() >= cost ) then
-		SetMoneyFrameColor("OBBBagFraPurchaseInfoDetailMoneyFrame", 1.0, 1.0, 1.0)
+		SetMoneyFrameColor(self.purchase.cost:GetName(), 1.0, 1.0, 1.0)
 	else
-		SetMoneyFrameColor("OBBBagFraPurchaseInfoDetailMoneyFrame", 1.0, 0.1, 0.1)
+		SetMoneyFrameColor(self.purchase.cost:GetName(), 1.0, 0.1, 0.1)
 	end
-	MoneyFrame_Update("OBBBagFraPurchaseInfoDetailMoneyFrame", cost)
-
-	if( full ) then
-		purchaseFrame:Hide()
-	else
-		purchaseFrame:Show()
-	end
-	]]
 end
 
 
