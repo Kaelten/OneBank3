@@ -113,6 +113,7 @@ function OneBank3:OnInitialize()
 	
 	self.purchase = OneCore3:BuildBaseFrame('OneBankPurchaseFrame')
 	self.purchase.handler = self
+	self.frame.purchase = self.purchase
 	
 	self.purchase:CustomizeFrame(self.db.profile)
 	self.purchase:SetSize(self.sidebar:GetWidth(), 50)
