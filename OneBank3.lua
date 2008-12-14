@@ -35,7 +35,7 @@ function OneBank3:OnInitialize()
 				if 	( bag <= NUM_BANKGENERIC_SLOTS ) then
 					BankFrameItemButton_Update(self.frame.slots["-1:"..bag])
 				else
-					BankFrameItemButton_Update(self.sidebar.buttons[bag	-NUM_BANKGENERIC_SLOTS]);
+					BankFrameItemButton_Update(self.sidebar.buttons[bag	- NUM_BANKGENERIC_SLOTS]);
 				end
 				return
 			end
@@ -168,7 +168,6 @@ function OneBank3:OnEnable()
 	self:SecureHook("CloseBankFrame", hide)
 end
 
---[[ TODO: Fix this shit 
 -- Custom Configuration
 function OneBank3:LoadCustomConfig(baseconfig)
 	local bagvisibility = {
@@ -180,11 +179,14 @@ function OneBank3:LoadCustomConfig(baseconfig)
 	}
 
 	local names = {
-		[0] = 'Backpack',
-		[1] = 'First Bag',
-		[2] = 'Second Bag',
-		[3] = 'Third Bag',
-		[4] = 'Fourth Bag',
+		[-1] = 'Bank Bag',
+		[5] = 'First Bank Bag',
+		[6] = 'Second Bank Bag',
+		[7] = 'Third Bank Bag',
+		[8] = 'Fourth Bank Bag',
+		[9] = 'Fifth Bank Bag',
+		[10] = 'Sixth Bank Bag',
+		[11] = 'Seventh Bank Bag',
 	}
 	
 	for id, text in pairs(names) do
@@ -205,7 +207,7 @@ function OneBank3:LoadCustomConfig(baseconfig)
 	
 	baseconfig.args.showbags.args.bag = bagvisibility
 end
-]]
+
 
 -- Hooks handlers
 function OneBank3:IsBagOpen(bag)
@@ -221,7 +223,6 @@ function OneBank3:GetBagButton(bag, parent)
 	local button = CreateFrame("CheckButton", "OneBankSBBag"..bag, parent, 'BankItemButtonBagTemplate')
 	button:SetID(bag+4)
 	
-	--[[
 	self:SecureHookScript(button, "OnEnter", function(button)
 		self:HighlightBagSlots(button:GetID())
 	end)
@@ -236,6 +237,7 @@ function OneBank3:GetBagButton(bag, parent)
 		GameTooltip:Hide()
 	end)
 	
+	
 	button:SetScript("OnClick", function(button) 
 		local haditem = PutItemInBag(button:GetInventorySlot())
 
@@ -244,11 +246,7 @@ function OneBank3:GetBagButton(bag, parent)
 		end 
 	end)
 	
-	button:SetScript("OnReceiveDrag", function(button) 
-		PutItemInBag(button:GetID())
-	end)
-	]]
-	
+	button:SetCheckedTexture([[Interface\Buttons\CheckButtonHilight]])
 	return button
 end
 
