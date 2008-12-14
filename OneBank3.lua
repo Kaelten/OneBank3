@@ -35,7 +35,9 @@ function OneBank3:OnInitialize()
 				if 	( bag <= NUM_BANKGENERIC_SLOTS ) then
 					BankFrameItemButton_Update(self.frame.slots["-1:"..bag])
 				else
-					BankFrameItemButton_Update(self.sidebar.buttons[bag	- NUM_BANKGENERIC_SLOTS]);
+					if self.sidebar and self.sidebar.buttons then
+						BankFrameItemButton_Update(self.sidebar.buttons[bag	- NUM_BANKGENERIC_SLOTS]);
+					end
 				end
 				return
 			end
