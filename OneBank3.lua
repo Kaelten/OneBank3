@@ -254,6 +254,10 @@ function OneBank3:GetBagButton(bag, parent)
 end
 
 function OneBank3:UpdateBagSlotStatus() 
+	if not self.sidebar.buttons then
+		return
+	end
+
 	local numSlots,full = GetNumBankSlots()
 	local button
 
