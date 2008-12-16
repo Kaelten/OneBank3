@@ -258,9 +258,7 @@ function OneBank3:UpdateBagSlotStatus()
 		return
 	end
 
-	local numSlots,full = GetNumBankSlots()
-	local button
-
+	local numSlots, full, button = GetNumBankSlots()
 	for i=1, NUM_BANKBAGSLOTS, 1 do
 		button = self.sidebar.buttons[i]
 		if ( button ) then
