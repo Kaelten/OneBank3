@@ -35,7 +35,6 @@ function OneBank3:OnInitialize()
 				if 	( bag <= NUM_BANKGENERIC_SLOTS ) then
 				
 					if not self.frame.bags[-1].colorLocked then
-						self:Print("Coloring")
 						for slot=1, self.frame.bags[-1].size do
 							self:ColorBorder(self:GetSlot(-1, slot))
 						end
