@@ -33,6 +33,14 @@ function OneBank3:OnInitialize()
 			-- This is a work around of the fact that bank slots work different than all other slots.
 			if event == 'PLAYERBANKSLOTS_CHANGED' then
 				if 	( bag <= NUM_BANKGENERIC_SLOTS ) then
+				
+					if not self.frame.bags[-1].colorLocked then
+						self:Print("Coloring")
+						for slot=1, self.frame.bags[-1].size do
+							self:ColorBorder(self:GetSlot(-1, slot))
+						end
+					end
+					
 					BankFrameItemButton_Update(self.frame.slots["-1:"..bag])
 				else
 					if self.sidebar and self.sidebar.buttons then
