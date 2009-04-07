@@ -100,8 +100,6 @@ function OneBank3:OnInitialize()
 				button2:SetPoint("TOPLEFT", self.sidebar, "TOPLEFT", self.leftBorder + self.colWidth , yOffset)
 				self.sidebar.buttons[b2ID] = button2
 			end
-
-	        self.sidebar:Hide() 
 			
 			local button = self:CreateBagButton(7, self.sidebar)
 			button:ClearAllPoints()
