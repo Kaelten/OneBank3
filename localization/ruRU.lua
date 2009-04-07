@@ -5,3 +5,4 @@ if L then
     @localization(locale="ruRU", format="lua_additive_table")@
     --@end-non-debug@]===]
 end
+                                         
