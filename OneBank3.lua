@@ -176,7 +176,9 @@ function OneBank3:OnEnable()
 	
 	self:RegisterEvent("BANKFRAME_OPENED", show)
 	self:RegisterEvent("BANKFRAME_CLOSED", hide)
-	self:SecureHook("CloseBankFrame", hide)
+	self:SecureHook("CloseBankFrame", hide)  
+	
+	self:RawHook("BankFrame_OnEvent", function(...) end, true)
 end
 
 --- Provides the custom config options for OneConfig

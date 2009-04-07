@@ -1,13 +1,13 @@
 ## Interface: 30000
 ## Title: OneBank3
-## Notes: A plugin for OneBag3 that will combine all the bank bags into one frame.
-## Version: 3.0.4-beta
+## Notes: OneBank3 will combine all the bank bags into one frame.
 ## Author: Kaelten
-## X-Category: Frame Modification
 ## X-eMail: kaelten@gmail.com
-## X-Website: http://www.wowace.com/projects/OneBank3
+## X-Category: Bags & Inventory
+## X-Website: http://www.wowace.com/projects/OneBank3/ 
+## X-Date: @project-timestamp@
+## Version: @project-version@
 ## SavedVariables: OneBank3DB
-## Dependencies: OneBag3
-## LoadOnDemand: 0
+## OptionalDeps: Ace3, OneCore
 
 OneBank3.xml
