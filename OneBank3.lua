@@ -1,24 +1,24 @@
 
-local OneCore3 = LibStub('AceAddon-3.0'):GetAddon('OneCore3')
-OneBank3 = OneCore3:NewModule("OneBank3")
+local OneBank3 = LibStub('AceAddon-3.0'):NewAddon('OneBank3', 'OneCore-1.0', 'OneFrame-1.0', 'OneConfig-1.0', 'AceHook-3.0', 'AceEvent-3.0')   
 local AceDB3 = LibStub('AceDB-3.0')
+local L = LibStub("AceLocale-3.0"):GetLocale("OneBag3")
 
+--- Handles the do once configuration, including db, frames and configuration 
 function OneBank3:OnInitialize()
 	self.db = AceDB3:New("OneBank3DB")
 	self.db:RegisterDefaults(self.defaults)
 	
 	self.displayName = "OneBank3"
-	self.core = OneCore3
 	self.isBank = true
 	
 	self.bagIndexes = {-1, 5, 6, 7, 8, 9, 10, 11}
 	
-	self.frame = self.core:BuildFrame("OneBankFrame")
+	self.frame = self:CreateMainFrame("OneBankFrame")
 	self.frame.handler = self
 	
 	self.frame:SetPosition(self.db.profile.position)
 	self.frame:CustomizeFrame(self.db.profile)
-	self.frame:SetSize(200, 200)
+	self.frame:SetSize(200, 200) 
 	
 	self.frame:SetScript("OnShow", function()
 		if not self.frame.slots then
@@ -36,7 +36,7 @@ function OneBank3:OnInitialize()
 				
 					if not self.frame.bags[-1].colorLocked then
 						for slot=1, self.frame.bags[-1].size do
-							self:ColorBorder(self:GetSlot(-1, slot))
+							self:ColorSlotBorder(self:GetSlot(-1, slot))
 						end
 					end
 					
@@ -74,15 +74,13 @@ function OneBank3:OnInitialize()
 		CloseBankFrame()
 	end)
 	
-	self.sidebar = OneCore3:BuildSideBar("OneBankSideFrame", self.frame)
+	self.sidebar = self:CreateSideBar("OneBankSideFrame", self.frame)
 	self.sidebar.handler = self
 	self.frame.sidebar = self.sidebar
 	
 	self.sidebar:CustomizeFrame(self.db.profile)
 	self.sidebar:SetHeight(4 * self.rowHeight + self.bottomBorder + self.topBorder - 7) 
 	self.sidebar:SetWidth(2 * self.colWidth + self.leftBorder + self.rightBorder)
-	
-	self.sidebar:Hide()
 	
 	self.sidebar:SetScript("OnShow", function()
 		if not self.sidebar.buttons then
@@ -92,18 +90,20 @@ function OneBank3:OnInitialize()
 				local b1ID, b2ID = row * 2 - 1, row * 2
 				local yOffset = 0 - 10 - ((row - 1) * self.rowHeight)
 				
-				local button = self:GetBagButton(b1ID, self.sidebar)
+				local button = self:CreateBagButton(b1ID, self.sidebar)
 				button:ClearAllPoints()
 				button:SetPoint("TOPLEFT", self.sidebar, "TOPLEFT", self.leftBorder, yOffset)
 				self.sidebar.buttons[b1ID] = button
 				
-				local button2 = self:GetBagButton(b2ID, self.sidebar)
+				local button2 = self:CreateBagButton(b2ID, self.sidebar)
 				button2:ClearAllPoints()
 				button2:SetPoint("TOPLEFT", self.sidebar, "TOPLEFT", self.leftBorder + self.colWidth , yOffset)
 				self.sidebar.buttons[b2ID] = button2
 			end
+
+	        self.sidebar:Hide() 
 			
-			local button = self:GetBagButton(7, self.sidebar)
+			local button = self:CreateBagButton(7, self.sidebar)
 			button:ClearAllPoints()
 			button:SetPoint("TOP", self.sidebar, "TOP", 0, 0 - 10 - (3 * self.rowHeight))
 			self.sidebar.buttons[7] = button	
@@ -120,7 +120,7 @@ function OneBank3:OnInitialize()
 		self.purchase:Hide()
 	end)
 	
-	self.purchase = OneCore3:BuildBaseFrame('OneBankPurchaseFrame')
+	self.purchase = self:CreateBaseFrame('OneBankPurchaseFrame')
 	self.purchase.handler = self
 	self.frame.purchase = self.purchase
 	
@@ -130,14 +130,14 @@ function OneBank3:OnInitialize()
 	self.purchase:ClearAllPoints()
 	self.purchase:SetPoint("TOP", self.sidebar, "BOTTOM", 0, 2)
 	
-	self.purchase.label = OneCore3:BuildFontString(self.purchase, nil, 11)
+	self.purchase.label = self:CreateFontString(self.purchase, nil, 11)
 	self.purchase.label:SetWidth(30)
 	self.purchase.label:SetText(COSTS_LABEL)
 	
 	self.purchase.label:ClearAllPoints()
 	self.purchase.label:SetPoint("TOPLEFT", self.purchase, "TOPLEFT", 12, -7)
 	
-	self.purchase.cost = OneCore3:BuildSmallMoneyFrame("MoneyFrame", self.purchase)
+	self.purchase.cost = self:CreateSmallMoneyFrame("MoneyFrame", self.purchase)
 	self.purchase.cost:SetPoint("LEFT", self.purchase.label, "RIGHT", 6, 0)
 	MoneyFrame_SetType(self.purchase.cost, "STATIC")
 	
@@ -156,11 +156,12 @@ function OneBank3:OnInitialize()
 	self.purchase:Hide()
 	
 	self:InitializeConfiguration()
-	self:EnablePlugins()
+--	self:EnablePlugins()
 --	self:OpenConfig()
 	
 end
 
+--- Sets up hooks and registers events  
 function OneBank3:OnEnable()
 	
 	local show = function() 
@@ -178,11 +179,12 @@ function OneBank3:OnEnable()
 	self:SecureHook("CloseBankFrame", hide)
 end
 
--- Custom Configuration
+--- Provides the custom config options for OneConfig
+-- @param baseconfig the base configuration table into which the custom options are injected
 function OneBank3:LoadCustomConfig(baseconfig)
 	local bagvisibility = {
 		type = "group",
-		name = "Specific Bag Filters",
+		name = L["Specific Bag Filters"], 
 		order = 2,
 		inline = true,
 		args = {}
@@ -203,8 +205,8 @@ function OneBank3:LoadCustomConfig(baseconfig)
 		bagvisibility.args[tostring(id)] = {
 			order = 5 * id + 5,
 			type = "toggle",
-			name = text,
-			desc = ("Toggles the display of your %s."):format(text),
+			name = L[text],  
+			desc = L[("Toggles the display of your %s."):format(text)],   
 			get = function(info)
 				return self.db.profile.show[id]
 			end,
@@ -228,7 +230,7 @@ function OneBank3:IsBagOpen(bag)
 	return self.isOpened and bag or nil
 end
 
-function OneBank3:GetBagButton(bag, parent)
+function OneBank3:CreateBagButton(bag, parent)
 
 	local button = CreateFrame("CheckButton", "OneBankSBBag"..bag, parent, 'BankItemButtonBagTemplate')
 	button:SetID(bag+4)

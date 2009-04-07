@@ -10,7 +10,4 @@
 ## Dependencies: OneBag3
 ## LoadOnDemand: 0
 
-localizations\locals.xml
-
-OneBank3.lua  
-
+OneBank3.xml
