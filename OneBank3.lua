@@ -1,7 +1,9 @@
 
-local OneBank3 = LibStub('AceAddon-3.0'):NewAddon('OneBank3', 'OneCore-1.0', 'OneFrame-1.0', 'OneConfig-1.0', 'AceHook-3.0', 'AceEvent-3.0')   
+local OneBank3 = LibStub('AceAddon-3.0'):NewAddon('OneBank3', 'OneCore-1.0', 'OneFrame-1.0', 'OneConfig-1.0', 'OnePlugin-1.0', 'AceHook-3.0', 'AceEvent-3.0', 'AceConsole-3.0')   
 local AceDB3 = LibStub('AceDB-3.0')
-local L = LibStub("AceLocale-3.0"):GetLocale("OneBag3")
+local L = LibStub("AceLocale-3.0"):GetLocale("OneBank3")
+
+OneBank3:InitializePluginSystem() 
 
 --- Handles the do once configuration, including db, frames and configuration 
 function OneBank3:OnInitialize()
@@ -176,7 +178,7 @@ function OneBank3:OnEnable()
 	self:RegisterEvent("BANKFRAME_CLOSED", hide)
 	self:SecureHook("CloseBankFrame", hide)  
 	
-	self:RawHook("BankFrame_OnEvent", function(...) end, true)
+	self:RawHookScript(BankFrame, "OnEvent", function(...) end)
 end
 
 --- Provides the custom config options for OneConfig
