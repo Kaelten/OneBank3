@@ -1,4 +1,5 @@
 
+local OneBag3 = LibStub('AceAddon-3.0'):GetAddon('OneBag3', true)       
 local OneBank3 = LibStub('AceAddon-3.0'):NewAddon('OneBank3', 'OneCore-1.0', 'OneFrame-1.0', 'OneConfig-1.0', 'OnePlugin-1.0', 'AceHook-3.0', 'AceEvent-3.0', 'AceConsole-3.0')   
 local AceDB3 = LibStub('AceDB-3.0')
 local L = LibStub("AceLocale-3.0"):GetLocale("OneBank3")
@@ -56,22 +57,30 @@ function OneBank3:OnInitialize()
 		
 		self:RegisterEvent("BAG_UPDATE", UpdateBag)
 		self:RegisterEvent("BAG_UPDATE_COOLDOWN", UpdateBag)
-		self:RegisterEvent("PLAYERBANKSLOTS_CHANGED", UpdateBag)
+		self:RegisterEvent("PLAYERBANKSLOTS_CHANGED", UpdateBag)     
+		self:RegisterEvent("ITEM_LOCK_CHANGED", "UpdateItemLock")		
 		
 		self:RegisterEvent("PLAYER_MONEY", "UpdateBagSlotStatus")
 		self:RegisterEvent("PLAYERBANKBAGSLOTS_CHANGED", "UpdateBagSlotStatus")		
 		
-		self.frame.name:SetText(UnitName("player").."'s Bank Bags")
+		self.frame.name:SetText(L["%s's Bank Bags"]:format(UnitName("player")))
 		
 		if self.frame.sidebarButton:GetChecked() then
 			self.frame.sidebar:Show()
+		end          
+		
+		if OneBag3 then          
+		    self.frame:ClearAllPoints()
+            self.frame:SetPoint("BOTTOMLEFT", OneBag3.frame, "TOPLEFT")
 		end
 	end)
 	
 	self.frame:SetScript("OnHide", function()
 		self:UnregisterEvent("BAG_UPDATE")
 		self:UnregisterEvent("BAG_UPDATE_COOLDOWN")  
-		self:UnregisterEvent("PLAYERBANKSLOTS_CHANGED")
+		self:UnregisterEvent("PLAYERBANKSLOTS_CHANGED")  
+		self:UnregisterEvent("ITEM_LOCK_CHANGED")
+		
 	    self:UnregisterEvent("PLAYER_MONEY")
 		self:UnregisterEvent("PLAYERBANKBAGSLOTS_CHANGED")
 		
@@ -113,8 +122,7 @@ function OneBank3:OnInitialize()
 			
 			for _, button in pairs(self.sidebar.buttons) do
 				BankFrameItemButton_Update(button)
-			end
-			
+			end                                                     			
 		end
 		self:UpdateBagSlotStatus()
 	end)
@@ -159,9 +167,6 @@ function OneBank3:OnInitialize()
 	self.purchase:Hide()
 	
 	self:InitializeConfiguration()
---	self:EnablePlugins()
---	self:OpenConfig()
-	
 end
 
 --- Sets up hooks and registers events  
