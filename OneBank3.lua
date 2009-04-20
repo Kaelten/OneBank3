@@ -70,7 +70,10 @@ function OneBank3:OnInitialize()
 	
 	self.frame:SetScript("OnHide", function()
 		self:UnregisterEvent("BAG_UPDATE")
-		self:UnregisterEvent("BAG_UPDATE_COOLDOWN")
+		self:UnregisterEvent("BAG_UPDATE_COOLDOWN")  
+		self:UnregisterEvent("PLAYERBANKSLOTS_CHANGED")
+	    self:UnregisterEvent("PLAYER_MONEY")
+		self:UnregisterEvent("PLAYERBANKBAGSLOTS_CHANGED")
 		
 		self.sidebar:Hide()
 		CloseBankFrame()
