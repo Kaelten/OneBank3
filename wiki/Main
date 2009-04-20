@@ -17,8 +17,7 @@ Also in the vein of earlier iterations I've kept to the philosophy of doing as l
 * Clean and powerful graphical configuration.
 
 ===Future Plans
-* Reintroduce the plugin system from earlier in this beta.  I had to remove it due to architectural issues.
-* Release OneRing3, OneView3, and OneVault3
+* Release OneView3, and OneVault3
 
 ===The Family
 ; OneCore
@@ -30,7 +29,9 @@ Also in the vein of earlier iterations I've kept to the philosophy of doing as l
 : [[http://www.wowace.com/projects/OneBag3|On WowAce]]
 : [[http://wow.curse.com/downloads/wow-addons/details/onebag3.aspx|On Curse]]
 ; OneRing3
-: Coming Soon(tm)
+: OneRing is the little cousin that's quiet and unobtrusive, he loves to copy the way OneBag dresses and has an obsession for keys.
+: [[http://www.wowace.com/projects/OneRing3|On WowAce]]
+: [[http://wow.curse.com/downloads/wow-addons/details/onering3.aspx|One Curse]]
 ; OneView3
 : Coming Soon(tm)
 ; OneVault3
