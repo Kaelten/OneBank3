@@ -1,7 +1,7 @@
-local L = LibStub("AceLocale-3.0"):NewLocale("OneBank3", "esMX")
+local L = LibStub("AceLocale-3.0"):NewLocale("OneBank3", "esES")
 
 if L then 
     --[===[@non-debug@
-    @localization(locale="esMX", format="lua_additive_table")@
+    @localization(locale="esES", format="lua_additive_table")@
     --@end-non-debug@]===]
 end
