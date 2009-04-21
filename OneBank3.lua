@@ -69,7 +69,7 @@ function OneBank3:OnInitialize()
 			self.frame.sidebar:Show()
 		end          
 		
-		if OneBag3 then          
+		if OneBag3 and not self.db.profile.moved then          
 		    self.frame:ClearAllPoints()
             self.frame:SetPoint("BOTTOMLEFT", OneBag3.frame, "TOPLEFT")
 		end
