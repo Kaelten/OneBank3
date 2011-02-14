@@ -1,2 +1,5 @@
+syntax: glob
+.idea
+*.iml
 libs
 .DS_Store

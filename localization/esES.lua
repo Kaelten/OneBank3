@@ -1,4 +1,4 @@
-local L = LibStub("AceLocale-3.0"):NewLocale("OneBank3", "esES")
+local L = LibStub("AceLocale-3.1"):NewLocale("OneBank3", "esES")
 
 if L then 
     --[===[@non-debug@

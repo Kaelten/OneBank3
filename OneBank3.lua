@@ -2,7 +2,7 @@
 local OneBag3 = LibStub('AceAddon-3.0'):GetAddon('OneBag3', true)       
 local OneBank3 = LibStub('AceAddon-3.0'):NewAddon('OneBank3', 'OneCore-1.0', 'OneFrame-1.0', 'OneConfig-1.0', 'OnePlugin-1.0', 'AceHook-3.0', 'AceEvent-3.0', 'AceConsole-3.0')   
 local AceDB3 = LibStub('AceDB-3.0')
-local L = LibStub("AceLocale-3.0"):GetLocale("OneBank3")
+local L = LibStub("AceLocale-3.1"):GetLocale("OneBank3")
 
 OneBank3:InitializePluginSystem() 
 
