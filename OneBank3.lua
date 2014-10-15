@@ -1,6 +1,6 @@
 
 local OneBag3 = LibStub('AceAddon-3.0'):GetAddon('OneBag3', true)
-local OneBank3 = LibStub('AceAddon-3.0'):NewAddon('OneBank3', 'OneCore-1.0', 'OneFrame-1.0', 'OneConfig-1.0', 'OnePlugin-1.0', 'AceHook-3.0', 'AceEvent-3.0', 'AceConsole-3.0')
+local OneBank3 = LibStub('AceAddon-3.0'):NewAddon('OneBank3', 'OneCore-1.0', 'OneFrame-1.0', 'OneConfig-1.0', 'OnePlugin-1.0', 'AceHook-3.0', 'AceEvent-3.0', 'AceConsole-3.0', 'AceTimer-3.0')
 local AceDB3 = LibStub('AceDB-3.0')
 local L = LibStub("AceLocale-3.0"):GetLocale("OneBank3")
 
@@ -55,7 +55,11 @@ function OneBank3:OnInitialize()
 			self:UpdateBag(bag)
 		end
 
-		self:RegisterEvent("BAG_UPDATE", UpdateBag)
+		local DelayedUpdateBag = function(event, bag)
+			self:ScheduleTimer(UpdateBag, 0.05, event, bag)
+		end
+
+		self:RegisterEvent("BAG_UPDATE", DelayedUpdateBag)
 		self:RegisterEvent("BAG_UPDATE_COOLDOWN", UpdateBag)
 		self:RegisterEvent("PLAYERBANKSLOTS_CHANGED", UpdateBag)
 		self:RegisterEvent("ITEM_LOCK_CHANGED", "UpdateItemLock")
@@ -243,18 +247,22 @@ end
 function OneBank3:CreateBagButton(bag, parent)
 
 	local button = CreateFrame("CheckButton", "OneBankSBBag"..bag, parent, 'BankItemButtonBagTemplate')
-	button:SetID(bag+4)
+	button:SetID(bag)
+
+	button.GetContainterID = function(self)
+		return self:GetID() + ITEM_INVENTORY_BANK_BAG_OFFSET
+	end
 
 	self:SecureHookScript(button, "OnEnter", function(button)
-		self:HighlightBagSlots(button:GetID())
+		self:HighlightBagSlots(button:GetContainterID())
 	end)
 
 	button:SetScript("OnLeave", function(button)
 		if not button:GetChecked() then
-			self:UnhighlightBagSlots(button:GetID())
-			self.frame.bags[button:GetID()].colorLocked = false
+			self:UnhighlightBagSlots(button:GetContainterID())
+			self.frame.bags[button:GetContainterID()].colorLocked = false
 		else
-			self.frame.bags[button:GetID()].colorLocked = true
+			self.frame.bags[button:GetContainterID()].colorLocked = true
 		end
 		GameTooltip:Hide()
 	end)
