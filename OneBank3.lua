@@ -14,7 +14,10 @@ function OneBank3:OnInitialize()
 	self.displayName = "OneBank3"
 	self.isBank = true
 
-	self.bagIndexes = {-1, 5, 6, 7, 8, 9, 10, 11}
+	self.bankBagIndexes = {-1, 5, 6, 7, 8, 9, 10, 11}
+	self.reagentBankIndexes = {-3}
+
+	self.bagIndexes = self.bankBagIndexes
 
 	self.frame = self:CreateMainFrame("OneBankFrame")
 	self.frame.handler = self
@@ -34,8 +37,23 @@ function OneBank3:OnInitialize()
 
 		local UpdateBag = function(event, bag)
 			-- This is a work around of the fact that bank slots work different than all other slots.
-			if event == 'PLAYERBANKSLOTS_CHANGED' then
-				if 	( bag <= NUM_BANKGENERIC_SLOTS ) then
+			if event == "PLAYERREAGENTBANKSLOTS_CHANGED" then
+				if not self.frame.bags[-3] then
+					return
+				end
+
+				if not self.frame.bags[-3].colorLocked then
+					for slot=1, self.frame.bags[-3].size do
+						self:ColorSlotBorder(self:GetSlot(-3, slot))
+					end
+				end
+
+				local slot = self.frame.slots["-3:"..bag]
+				if slot then
+					BankFrameItemButton_Update(slot)
+				end
+			elseif event == 'PLAYERBANKSLOTS_CHANGED' then
+				if ( bag <= NUM_BANKGENERIC_SLOTS ) then
 
 					if not self.frame.bags[-1].colorLocked then
 						for slot=1, self.frame.bags[-1].size do
@@ -62,10 +80,28 @@ function OneBank3:OnInitialize()
 		self:RegisterEvent("BAG_UPDATE", DelayedUpdateBag)
 		self:RegisterEvent("BAG_UPDATE_COOLDOWN", UpdateBag)
 		self:RegisterEvent("PLAYERBANKSLOTS_CHANGED", UpdateBag)
+		self:RegisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED", UpdateBag)
+
 		self:RegisterEvent("ITEM_LOCK_CHANGED", "UpdateItemLock")
 
 		self:RegisterEvent("PLAYER_MONEY", "UpdateBagSlotStatus")
-		self:RegisterEvent("PLAYERBANKBAGSLOTS_CHANGED", "UpdateBagSlotStatus")
+		self:RegisterEvent("PLAYERBANKBAGSLOTS_CHANGED", function()
+			self:UpdateBagSlotStatus()
+			DelayedUpdateBag()
+		end)
+
+		self:RegisterEvent("REAGENTBANK_PURCHASED", function()
+			self.depositReagentsButtons:Show()
+
+			if self.reagentBankButton:GetChecked() then
+				self.bagIndexes = self.reagentBankIndexes
+				self.frame.name:SetText(L["%s's Reagent Bank"]:format(UnitName("player")))
+
+				self:BuildFrame()
+				self:OrganizeFrame(true)
+				self:UpdateFrame()
+			end
+		end)
 
 		self.frame.name:SetText(L["%s's Bank Bags"]:format(UnitName("player")))
 
@@ -83,7 +119,10 @@ function OneBank3:OnInitialize()
 		self:UnregisterEvent("BAG_UPDATE")
 		self:UnregisterEvent("BAG_UPDATE_COOLDOWN")
 		self:UnregisterEvent("PLAYERBANKSLOTS_CHANGED")
+		self:UnregisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED")
 		self:UnregisterEvent("ITEM_LOCK_CHANGED")
+
+		self:UnregisterEvent("REAGENTBANK_PURCHASED")
 
 	    self:UnregisterEvent("PLAYER_MONEY")
 		self:UnregisterEvent("PLAYERBANKBAGSLOTS_CHANGED")
@@ -170,6 +209,66 @@ function OneBank3:OnInitialize()
 
 	self.purchase:Hide()
 
+	self.reagentBankButton = CreateFrame("CheckButton", nil, self.frame, "UIPanelButtonTemplate")
+	self.reagentBankButton:SetPoint("BOTTOMLEFT", self.frame, "BOTTOMLEFT", 5, 5)
+	self.reagentBankButton:SetText(L["Reagent Bank"])
+	self.reagentBankButton:SetWidth(105)
+	self.reagentBankButton:SetHeight(21)
+
+	local selectedTexture = self.reagentBankButton:CreateTexture(nil, "OVERLAY")
+	selectedTexture:SetHeight(19)
+	selectedTexture:SetWidth(103)
+
+	selectedTexture:SetPoint("CENTER", self.reagentBankButton, "CENTER", 0, 0)
+	selectedTexture:SetTexture("Interface\\HelpFrame\\HelpButtons")
+	selectedTexture:SetTexCoord(0.00390625, 0.68359375, 0.66015625, 0.87109375)
+	selectedTexture:Hide()
+
+	self.reagentBankButton.selectedTexture = selectedTexture
+
+	self.reagentBankButton:SetScript("OnClick", function()
+		if self.reagentBankButton:GetChecked() then
+			selectedTexture:Show()
+			self.reagentBankButton:SetNormalFontObject(GameFontHighlight)
+			if IsReagentBankUnlocked() then
+				self.bagIndexes = self.reagentBankIndexes
+				self.frame.name:SetText(L["%s's Reagent Bank"]:format(UnitName("player")))
+			else
+				PlaySound("igMainMenuOption")
+				StaticPopup_Show("CONFIRM_BUY_REAGENTBANK_TAB")
+			end
+		else
+			self.bagIndexes = self.bankBagIndexes
+			self.frame.name:SetText(L["%s's Bank Bags"]:format(UnitName("player")))
+
+			selectedTexture:Hide()
+			self.reagentBankButton:SetNormalFontObject(GameFontNormal)
+		end
+
+		self:BuildFrame()
+		self:OrganizeFrame(true)
+		self:UpdateFrame()
+	end)
+
+	StaticPopupDialogs.CONFIRM_BUY_REAGENTBANK_TAB.OnCancel = function()
+		self.reagentBankButton:Click()
+	end
+
+	self.depositReagentsButtons = CreateFrame("Button", nil, self.frame, "UIPanelButtonTemplate")
+	self.depositReagentsButtons:SetPoint("LEFT", self.reagentBankButton, "RIGHT", 0, 0)
+	self.depositReagentsButtons:SetText(L["Deposit Reagents"])
+	self.depositReagentsButtons:SetHeight(21)
+	self.depositReagentsButtons:SetWidth(128)
+
+	self.depositReagentsButtons:SetScript("OnClick", function()
+		PlaySound("igMainMenuOption");
+		DepositReagentBank();
+	end)
+
+	if not IsReagentBankUnlocked() then
+		self.depositReagentsButtons:Hide()
+	end
+
 	self:InitializeConfiguration()
 end
 
@@ -234,6 +333,14 @@ function OneBank3:LoadCustomConfig(baseconfig)
 	baseconfig.args.showbags.args.bag = bagvisibility
 end
 
+--- Handles Bag Sorting
+function OneBank3:SortBags()
+	if self.bagIndexes == self.bankBagIndexes then
+		SortBankBags()
+	elseif self.bagIndexes == self.reagentBankIndexes then
+		SortReagentBankBags()
+	end
+end
 
 -- Hooks handlers
 function OneBank3:IsBagOpen(bag)
