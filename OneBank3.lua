@@ -237,6 +237,7 @@ function OneBank3:OnInitialize()
 			if IsReagentBankUnlocked() then
 				self.bagIndexes = self.reagentBankIndexes
 				self.frame.name:SetText(L["%s's Reagent Bank"]:format(UnitName("player")))
+				self.depositReagentsButtons:Show()
 			else
 				PlaySound("igMainMenuOption")
 				StaticPopup_Show("CONFIRM_BUY_REAGENTBANK_TAB")
@@ -269,9 +270,15 @@ function OneBank3:OnInitialize()
 		DepositReagentBank();
 	end)
 
-	if not IsReagentBankUnlocked() then
-		self.depositReagentsButtons:Hide()
+	local hideDespositeButton = function()
+		if IsReagentBankUnlocked() then
+			self.depositReagentsButtons:Show()
+		else
+			self.depositReagentsButtons:Hide()
+		end
 	end
+
+	self:ScheduleTimer(hideDespositeButton, 0.05)
 
 	self:InitializeConfiguration()
 end
