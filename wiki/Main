@@ -16,6 +16,7 @@ Also in the vein of earlier iterations I've kept to the philosophy of doing as l
 * Customizable scale, background color, alpha, and more.
 * Clean and powerful graphical configuration.
 * Full support for the Reagent Bank
+* Exposes WoW's built in bag sorting
 
 ===The Family
 ; OneCore
