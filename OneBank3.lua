@@ -103,7 +103,11 @@ function OneBank3:OnInitialize()
 			end
 		end)
 
-		self.frame.name:SetText(L["%s's Bank Bags"]:format(UnitName("player")))
+		if self.reagentBankButton:GetChecked() then
+			self.frame.name:SetText(L["%s's Reagent Bank"]:format(UnitName("player")))
+		else
+			self.frame.name:SetText(L["%s's Bank Bags"]:format(UnitName("player")))
+		end
 
 		if self.frame.sidebarButton:GetChecked() then
 			self.frame.sidebar:Show()
