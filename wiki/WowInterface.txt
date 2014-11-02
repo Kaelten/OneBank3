@@ -1,0 +1,105 @@
+[B]OneBank3[/B] is the latest in a long line of bank bag replacements for the default bank bags that will combine all of your bags into one frame.
+
+OneBag has a long history of minimalism and OneBank3 will continue to uphold the standard of easy of use and simplicity it's predecessors set.  Like the earlier versions OneBank will continue to offer powerful options for those who wish to delve a little deeper.
+
+Also in the vein of earlier iterations I've kept to the philosophy of doing as little work as possible, as a result the code base is very small, and most of it is in the OneCore library.  As of the time of writing there are only 365 lines of code unique to OneBank3, and only 1804 lines of code in OneCore itself.  LoC is a horrible stat in general, but it's fun none the less, and I cheat horribly since I build off the powerful [[http://www.wowace.com/projects/Ace3|Ace3 libraries]].
+
+[SIZE="4"][U]Features[/U][/SIZE]
+[LIST]
+* [B]Now with Search[/B]
+* [B]Can now run completely independent of OneBag3[/B]
+* Combines all of your bank bags into one.
+* Customizable number of columns.
+* Inherent support for addons that interact with the default bags.
+* Color coded slots by item rarity or bag type.
+* Allows only certain bags to be displayed, either by slot or type.
+* Custom bag bar which will highlight it's associated slots on mouseover.  This highlighting can be locked in place by clicking.
+* Integrated purchasing of bag slots.
+* Customizable scale, background color, alpha, and more.
+* Clean and powerful graphical configuration.
+* Full support for the Reagent Bank
+* Exposes WoW's built in bag sorting
+[/LIST]
+
+[SIZE="4"][U]Search Syntax[/U][/SIZE]
+
+Search inside of OneBank3 is powered by the [URL="https://github.com/Jaliborc/LibItemSearch-1.2"]LibItemSearch library by Jalibroc[/URL].  As a result it supports many advanced search options.
+
+[B]Advanced Filters[/B]:
+[LIST]
+[*] [B]Quality[/B]:
+    [LIST]
+    [*]q:[quality] or quality:[quality]
+    [*]Example: q:epic
+    [/LIST]
+[*] [B]Level[/B]:
+    [LIST]
+    [*]l:[level], lvl:[level] or level:[quality]
+    [*]Example lvl:30
+    [/LIST]
+[*] [B]Type[/B] or [B]Subtype[/B]:
+    [LIST]
+    [*]t:[search], type:[search] or slot:[search]
+    [*]Example t:weapon
+    [/LIST]
+[*] [B]Name[/B]:
+    [LIST]
+    [*]n:[name] or name:[name]
+    [*]Example n:lockbox
+    [/LIST]
+[*] [B]Sets[/B]:
+    [LIST]
+    [*]s:[set] or set:[set]
+    [*]Example s:fire
+    [/LIST]
+[*] [B]Tooltip Info[/B]:
+    [LIST]
+    [*]tt:[term], tip:[term] or tooltip:[term]
+    [*]Example tt:binds
+    [/LIST]
+[/LIST]
+
+[B]Search Operators[/B]
+[LIST]
+[*] [B]Logical NOT[/B]: "!q:epic" matches items that are NOT epic.
+[*] [B]Logical OR[/B]: "q:epic | q:rare" matches items that are either epic OR rare.
+[*] [B]Logical AND[/B]: "q:epic & t:weapon" matches items that are epic AND weapons.
+[*] [B]Greater Than[/B]: "lvl: > 30" matches items that are higher than level 30.
+[*] [B]Less Than[/B]: "lvl: < 30" matches items that are less than level 30.
+[*] [B]Greater or Equal to[/B]: "lvl: => 30" matches items that are lvl 30 or greater.
+[*] [B]Lesser or Equal to[/B]: "lvl: <= 30" matches items that are lvl 30 or less.
+[/LIST]
+
+[B]Special Keywords[/B]
+[LIST]
+[*] [B]soulbound[/B], [B]bound[/B], [B]bop[/B] - Bind on pickup items.
+[*] [B]bou[/B] - Bind on use items.
+[*] [B]boe[/B] - Bind on equip items.
+[*] [B]boa[/B] - Bind on account items.
+[*] [B]quest[/B] - Quest bound items.
+[/LIST]
+
+[SIZE="4"][U]The Family (Other Addons)[/U][/SIZE]
+
+[SIZE="3"]OneBag3[/SIZE]
+
+OneBank's adventurous brother who didn't mind being dragged through a dank swamp, Bag does pretty much the exact same job for your character's bag as OneBank3 does for your bank bags.
+
+[URL="http://www.wowace.com/projects/OneBag3"]On WowAce[/URL] | [URL="http://www.wowinterface.com/downloads/info4207-OneBag3.html"]On WowInterface[/URL]
+
+[SIZE="4"][U]Project Support[/U][/SIZE]
+
+[SIZE="3"]Localization[/SIZE]
+
+Localization is powered by WowAce's built in translation system.  Please use the following links to contribute to localization.
+[LIST]
+[*] [URL="http://www.wowace.com/projects/OneCore/localization/"]OneCore[/URL]
+[*] [URL="http://www.wowace.com/projects/OneBag3/localization/"]OneBag3[/URL]
+[*] [URL="http://www.wowace.com/projects/OneBank3/localization/"]OneBank3[/URL]
+[/LIST]
+
+[SIZE="3"]Bug Reports & Suggestions[/SIZE]
+
+Please report all bug reports to [URL="http://www.wowace.com/projects/OneBank3/tickets"]my tracker on WowAce[/URL].
+
+I want to thank all the users who've been using OneBag and OneBank for so long.

@@ -21,6 +21,7 @@ function OneBank3:OnInitialize()
 
 	self.frame = self:CreateMainFrame("OneBankFrame")
 	self.frame.handler = self
+	self:UpdateFrameHeader()
 
 	self.frame:SetPosition(self.db.profile.position)
 	self.frame:CustomizeFrame(self.db.profile)

@@ -21,7 +21,7 @@ Also in the vein of earlier iterations I've kept to the philosophy of doing as l
 
 ===Search Syntax
 
-Search inside of OneBag3 is powered by the [[https://github.com/Jaliborc/LibItemSearch-1.2|LibItemSearch library by Jalibroc]].  As a result it supports many advanced search options.
+Search inside of OneBank3 is powered by the [[https://github.com/Jaliborc/LibItemSearch-1.2|LibItemSearch library by Jalibroc]].  As a result it supports many advanced search options.
 
 **Advanced Filters**:
 
