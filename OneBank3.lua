@@ -208,7 +208,7 @@ function OneBank3:OnInitialize()
 	self.purchase.button:SetPoint("TOPLEFT", self.purchase, "TOPLEFT", 7, -22)
 
 	self.purchase.button:SetScript("OnClick", function()
-		PlaySound("igMainMenuOption")
+		PlaySound(852, "SFX")
 		StaticPopup_Show("CONFIRM_BUY_BANK_SLOT")
 	end)
 
@@ -240,7 +240,7 @@ function OneBank3:OnInitialize()
 				self.frame.name:SetText(L["%s's Reagent Bank"]:format(UnitName("player")))
 				self.depositReagentsButtons:Show()
 			else
-				PlaySound("igMainMenuOption")
+				PlaySound(852, "SFX")
 				StaticPopup_Show("CONFIRM_BUY_REAGENTBANK_TAB")
 			end
 		else
@@ -267,7 +267,7 @@ function OneBank3:OnInitialize()
 	self.depositReagentsButtons:SetWidth(128)
 
 	self.depositReagentsButtons:SetScript("OnClick", function()
-		PlaySound("igMainMenuOption");
+		PlaySound(852, "SFX")
 		DepositReagentBank();
 	end)
 
