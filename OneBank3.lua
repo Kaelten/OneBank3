@@ -280,7 +280,6 @@ function OneBank3:OnInitialize()
 	end
 
 	self:ScheduleTimer(hideDespositeButton, 0.05)
-
 	self:InitializeConfiguration()
 end
 
