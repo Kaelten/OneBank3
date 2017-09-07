@@ -8,7 +8,6 @@
 ## X-Date: @project-timestamp@
 ## Version: @project-version@
 ## SavedVariables: OneBank3DB
-## Dependencies: OneCore
-## OptionalDeps: Ace3
+## OptionalDeps: Ace3, OneCore
 
 OneBank3.xml
