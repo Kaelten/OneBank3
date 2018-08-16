@@ -14,7 +14,7 @@
     <Include file="libs\AceConfig-3.0\AceConfig-3.0.xml" />
     <Include file="libs\AceTimer-3.0\AceTimer-3.0.xml" />
 
-    <Include file="libs\OneCore-1.0\OneCore-1.0.xml" />
+    <Include file="libs\OneCore-1.0\OneCore-1.0\OneCore-1.0.xml" />
     @end-non-debug@-->
 
     <Include file="localization\load.xml" />
