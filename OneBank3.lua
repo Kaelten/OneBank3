@@ -364,7 +364,7 @@ end
 
 function OneBank3:CreateBagButton(bag, parent)
 
-	local button = CreateFrame("CheckButton", "OneBankSBBag"..bag, parent, 'BankItemButtonBagTemplate')
+	local button = CreateFrame("ItemButton", "OneBankSBBag"..bag, parent, 'BankItemButtonBagTemplate')
 	button:SetID(bag)
 
 	button.GetContainterID = function(self)
@@ -376,25 +376,27 @@ function OneBank3:CreateBagButton(bag, parent)
 	end)
 
 	button:SetScript("OnLeave", function(button)
-		if not button:GetChecked() then
-			self:UnhighlightBagSlots(button:GetContainterID())
-			self.frame.bags[button:GetContainterID()].colorLocked = false
+		local index = button:GetContainterID()
+
+		if not self.frame.bags[index].checked then
+			self:UnhighlightBagSlots(index)
+			self.frame.bags[index].colorLocked = false
 		else
-			self.frame.bags[button:GetContainterID()].colorLocked = true
+			self.frame.bags[index].colorLocked = true
 		end
+
 		GameTooltip:Hide()
 	end)
-
 
 	button:SetScript("OnClick", function(button)
 		local haditem = PutItemInBag(button:GetInventorySlot())
 
-		if haditem then
-			button:SetChecked(not button:GetChecked())
+		if not haditem then
+			local index = button:GetContainterID()
+			self.frame.bags[index].checked = not self.frame.bags[index].checked
 		end
 	end)
 
-	button:SetCheckedTexture([[Interface\Buttons\CheckButtonHilight]])
 	return button
 end
 
