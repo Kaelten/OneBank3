@@ -1,6 +1,6 @@
 ## Interface: 80100
 ## Title: OneBank3
-## Notes: OneBank3 will combine all the bank bags into one frame.
+## Notes: OneBank3 will combine all the bank bags into one frame
 ## Author: Kaelten
 ## X-eMail: kaelten@gmail.com
 ## X-Category: Bags & Inventory
