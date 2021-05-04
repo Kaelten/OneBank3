@@ -81,7 +81,6 @@ function OneBank3:OnInitialize()
 		self:RegisterEvent("BAG_UPDATE", DelayedUpdateBag)
 		self:RegisterEvent("BAG_UPDATE_COOLDOWN", UpdateBag)
 		self:RegisterEvent("PLAYERBANKSLOTS_CHANGED", UpdateBag)
-		self:RegisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED", UpdateBag)
 
 		self:RegisterEvent("ITEM_LOCK_CHANGED", "UpdateItemLock")
 
@@ -91,20 +90,23 @@ function OneBank3:OnInitialize()
 			DelayedUpdateBag()
 		end)
 
-		self:RegisterEvent("REAGENTBANK_PURCHASED", function()
-			self.depositReagentsButtons:Show()
+        if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
+        	self:RegisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED", UpdateBag)
+            self:RegisterEvent("REAGENTBANK_PURCHASED", function()
+                self.depositReagentsButtons:Show()
 
-			if self.reagentBankButton:GetChecked() then
-				self.bagIndexes = self.reagentBankIndexes
-				self.frame.name:SetText(L["%s's Reagent Bank"]:format(UnitName("player")))
+                if self.reagentBankButton:GetChecked() then
+                    self.bagIndexes = self.reagentBankIndexes
+                    self.frame.name:SetText(L["%s's Reagent Bank"]:format(UnitName("player")))
 
-				self:BuildFrame()
-				self:OrganizeFrame(true)
-				self:UpdateFrame()
-			end
-		end)
+                    self:BuildFrame()
+                    self:OrganizeFrame(true)
+                    self:UpdateFrame()
+                end
+            end)
+		end
 
-		if self.reagentBankButton:GetChecked() then
+		if self.reagentBankButton and self.reagentBankButton:GetChecked() then
 			self.frame.name:SetText(L["%s's Reagent Bank"]:format(UnitName("player")))
 		else
 			self.frame.name:SetText(L["%s's Bank Bags"]:format(UnitName("player")))
@@ -124,10 +126,12 @@ function OneBank3:OnInitialize()
 		self:UnregisterEvent("BAG_UPDATE")
 		self:UnregisterEvent("BAG_UPDATE_COOLDOWN")
 		self:UnregisterEvent("PLAYERBANKSLOTS_CHANGED")
-		self:UnregisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED")
 		self:UnregisterEvent("ITEM_LOCK_CHANGED")
 
-		self:UnregisterEvent("REAGENTBANK_PURCHASED")
+        if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
+		    self:UnregisterEvent("REAGENTBANK_PURCHASED")
+		    self:UnregisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED")
+        end
 
 	    self:UnregisterEvent("PLAYER_MONEY")
 		self:UnregisterEvent("PLAYERBANKBAGSLOTS_CHANGED")
@@ -140,8 +144,10 @@ function OneBank3:OnInitialize()
 	self.sidebar.handler = self
 	self.frame.sidebar = self.sidebar
 
+    local sidebarRows = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE and 4 or 3
+
 	self.sidebar:CustomizeFrame(self.db.profile)
-	self.sidebar:SetHeight(4 * self.rowHeight + self.bottomBorder + self.topBorder - 7)
+	self.sidebar:SetHeight(sidebarRows * self.rowHeight + self.bottomBorder + self.topBorder - 7)
 	self.sidebar:SetWidth(2 * self.colWidth + self.leftBorder + self.rightBorder)
 
 	self.sidebar:SetScript("OnShow", function()
@@ -163,15 +169,18 @@ function OneBank3:OnInitialize()
 				self.sidebar.buttons[b2ID] = button2
 			end
 
-			local button = self:CreateBagButton(7, self.sidebar)
-			button:ClearAllPoints()
-			button:SetPoint("TOP", self.sidebar, "TOP", 0, 0 - 10 - (3 * self.rowHeight))
-			self.sidebar.buttons[7] = button
+            if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
+                local button = self:CreateBagButton(7, self.sidebar)
+                button:ClearAllPoints()
+                button:SetPoint("TOP", self.sidebar, "TOP", 0, 0 - 10 - (3 * self.rowHeight))
+                self.sidebar.buttons[7] = button
+			end
 
 			for _, button in pairs(self.sidebar.buttons) do
 				BankFrameItemButton_Update(button)
 			end
 		end
+
 		self:UpdateBagSlotStatus()
 	end)
 
@@ -214,72 +223,75 @@ function OneBank3:OnInitialize()
 
 	self.purchase:Hide()
 
-	self.reagentBankButton = CreateFrame("CheckButton", nil, self.frame, "UIPanelButtonTemplate")
-	self.reagentBankButton:SetPoint("BOTTOMLEFT", self.frame, "BOTTOMLEFT", 5, 5)
-	self.reagentBankButton:SetText(L["Reagent Bank"])
-	self.reagentBankButton:SetWidth(105)
-	self.reagentBankButton:SetHeight(21)
+    if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
+        self.reagentBankButton = CreateFrame("CheckButton", nil, self.frame, "UIPanelButtonTemplate")
+        self.reagentBankButton:SetPoint("BOTTOMLEFT", self.frame, "BOTTOMLEFT", 5, 5)
+        self.reagentBankButton:SetText(L["Reagent Bank"])
+        self.reagentBankButton:SetWidth(105)
+        self.reagentBankButton:SetHeight(21)
 
-	local selectedTexture = self.reagentBankButton:CreateTexture(nil, "OVERLAY")
-	selectedTexture:SetHeight(19)
-	selectedTexture:SetWidth(103)
+        local selectedTexture = self.reagentBankButton:CreateTexture(nil, "OVERLAY")
+        selectedTexture:SetHeight(19)
+        selectedTexture:SetWidth(103)
 
-	selectedTexture:SetPoint("CENTER", self.reagentBankButton, "CENTER", 0, 0)
-	selectedTexture:SetTexture("Interface\\HelpFrame\\HelpButtons")
-	selectedTexture:SetTexCoord(0.00390625, 0.68359375, 0.66015625, 0.87109375)
-	selectedTexture:Hide()
+        selectedTexture:SetPoint("CENTER", self.reagentBankButton, "CENTER", 0, 0)
+        selectedTexture:SetTexture("Interface\\HelpFrame\\HelpButtons")
+        selectedTexture:SetTexCoord(0.00390625, 0.68359375, 0.66015625, 0.87109375)
+        selectedTexture:Hide()
 
-	self.reagentBankButton.selectedTexture = selectedTexture
+        self.reagentBankButton.selectedTexture = selectedTexture
 
-	self.reagentBankButton:SetScript("OnClick", function()
-		if self.reagentBankButton:GetChecked() then
-			selectedTexture:Show()
-			self.reagentBankButton:SetNormalFontObject(GameFontHighlight)
-			if IsReagentBankUnlocked() then
-				self.bagIndexes = self.reagentBankIndexes
-				self.frame.name:SetText(L["%s's Reagent Bank"]:format(UnitName("player")))
-				self.depositReagentsButtons:Show()
-			else
-				PlaySound(852, "SFX")
-				StaticPopup_Show("CONFIRM_BUY_REAGENTBANK_TAB")
-			end
-		else
-			self.bagIndexes = self.bankBagIndexes
-			self.frame.name:SetText(L["%s's Bank Bags"]:format(UnitName("player")))
+        self.reagentBankButton:SetScript("OnClick", function()
+            if self.reagentBankButton:GetChecked() then
+                selectedTexture:Show()
+                self.reagentBankButton:SetNormalFontObject(GameFontHighlight)
+                if IsReagentBankUnlocked() then
+                    self.bagIndexes = self.reagentBankIndexes
+                    self.frame.name:SetText(L["%s's Reagent Bank"]:format(UnitName("player")))
+                    self.depositReagentsButtons:Show()
+                else
+                    PlaySound(852, "SFX")
+                    StaticPopup_Show("CONFIRM_BUY_REAGENTBANK_TAB")
+                end
+            else
+                self.bagIndexes = self.bankBagIndexes
+                self.frame.name:SetText(L["%s's Bank Bags"]:format(UnitName("player")))
 
-			selectedTexture:Hide()
-			self.reagentBankButton:SetNormalFontObject(GameFontNormal)
-		end
+                selectedTexture:Hide()
+                self.reagentBankButton:SetNormalFontObject(GameFontNormal)
+            end
 
-		self:BuildFrame()
-		self:OrganizeFrame(true)
-		self:UpdateFrame()
-	end)
+            self:BuildFrame()
+            self:OrganizeFrame(true)
+            self:UpdateFrame()
+        end)
 
-	StaticPopupDialogs.CONFIRM_BUY_REAGENTBANK_TAB.OnCancel = function()
-		self.reagentBankButton:Click()
+        StaticPopupDialogs.CONFIRM_BUY_REAGENTBANK_TAB.OnCancel = function()
+            self.reagentBankButton:Click()
+        end
+
+        self.depositReagentsButtons = CreateFrame("Button", nil, self.frame, "UIPanelButtonTemplate")
+        self.depositReagentsButtons:SetPoint("LEFT", self.reagentBankButton, "RIGHT", 0, 0)
+        self.depositReagentsButtons:SetText(L["Deposit Reagents"])
+        self.depositReagentsButtons:SetHeight(21)
+        self.depositReagentsButtons:SetWidth(128)
+
+        self.depositReagentsButtons:SetScript("OnClick", function()
+            PlaySound(852, "SFX")
+            DepositReagentBank();
+        end)
+
+        local hideDepositButton = function()
+            if IsReagentBankUnlocked() then
+                self.depositReagentsButtons:Show()
+            else
+                self.depositReagentsButtons:Hide()
+            end
+        end
+
+        self:ScheduleTimer(hideDepositButton, 0.05)
 	end
 
-	self.depositReagentsButtons = CreateFrame("Button", nil, self.frame, "UIPanelButtonTemplate")
-	self.depositReagentsButtons:SetPoint("LEFT", self.reagentBankButton, "RIGHT", 0, 0)
-	self.depositReagentsButtons:SetText(L["Deposit Reagents"])
-	self.depositReagentsButtons:SetHeight(21)
-	self.depositReagentsButtons:SetWidth(128)
-
-	self.depositReagentsButtons:SetScript("OnClick", function()
-		PlaySound(852, "SFX")
-		DepositReagentBank();
-	end)
-
-	local hideDespositeButton = function()
-		if IsReagentBankUnlocked() then
-			self.depositReagentsButtons:Show()
-		else
-			self.depositReagentsButtons:Hide()
-		end
-	end
-
-	self:ScheduleTimer(hideDespositeButton, 0.05)
 	self:InitializeConfiguration()
 end
 
@@ -363,23 +375,26 @@ function OneBank3:IsBagOpen(bag)
 end
 
 function OneBank3:CreateBagButton(bag, parent)
-
-	local button = CreateFrame("ItemButton", "OneBankSBBag"..bag, parent, 'BankItemButtonBagTemplate')
+    local frameType = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE and "ItemButton" or "CheckButton"
+	local button = CreateFrame(frameType, "OneBankSBBag"..bag, parent, 'BankItemButtonBagTemplate')
+	local highlight = self:CreateButtonHighlight(button)
 	button:SetID(bag)
 
-	button.GetContainterID = function(self)
+	button.GetContainerID = function(self)
 		return self:GetID() + ITEM_INVENTORY_BANK_BAG_OFFSET
 	end
 
 	self:SecureHookScript(button, "OnEnter", function(button)
-		self:HighlightBagSlots(button:GetContainterID())
+		self:HighlightBagSlots(button:GetContainerID())
+		highlight:Show()
 	end)
 
 	button:SetScript("OnLeave", function(button)
-		local index = button:GetContainterID()
+		local index = button:GetContainerID()
 
 		if not self.frame.bags[index].checked then
 			self:UnhighlightBagSlots(index)
+			highlight:Hide()
 			self.frame.bags[index].colorLocked = false
 		else
 			self.frame.bags[index].colorLocked = true
@@ -392,7 +407,7 @@ function OneBank3:CreateBagButton(bag, parent)
 		local haditem = PutItemInBag(button:GetInventorySlot())
 
 		if not haditem then
-			local index = button:GetContainterID()
+			local index = button:GetContainerID()
 			self.frame.bags[index].checked = not self.frame.bags[index].checked
 		end
 	end)
