@@ -148,7 +148,7 @@ function OneBank3:OnInitialize()
 	self.sidebar.handler = self
 	self.frame.sidebar = self.sidebar
 
-    local sidebarRows = self.IsRetail and 4 or 3
+    local sidebarRows = self.IsClassic and 3 or 4
 
 	self.sidebar:CustomizeFrame(self.db.profile)
 	self.sidebar:SetHeight(sidebarRows * self.rowHeight + self.bottomBorder + self.topBorder - 7)
@@ -173,7 +173,7 @@ function OneBank3:OnInitialize()
 				self.sidebar.buttons[b2ID] = button2
 			end
 
-            if self.IsRetail then
+            if sidebarRows == 4 then
                 local button = self:CreateBagButton(7, self.sidebar)
                 button:ClearAllPoints()
                 button:SetPoint("TOP", self.sidebar, "TOP", 0, 0 - 10 - (3 * self.rowHeight))
