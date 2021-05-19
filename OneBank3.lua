@@ -4,6 +4,10 @@ local OneBank3 = LibStub('AceAddon-3.0'):NewAddon('OneBank3', 'OneCore-1.0', 'On
 local AceDB3 = LibStub('AceDB-3.0')
 local L = LibStub("AceLocale-3.0"):GetLocale("OneBank3")
 
+OneBank3.IsRetail = _G.WOW_PROJECT_ID == _G.WOW_PROJECT_MAINLINE
+OneBank3.IsClassic = _G.WOW_PROJECT_ID == _G.WOW_PROJECT_CLASSIC
+OneBank3.IsBC = _G.WOW_PROJECT_ID == _G.WOW_PROJECT_BURNING_CRUSADE_CLASSIC
+
 OneBank3:InitializePluginSystem()
 
 --- Handles the do once configuration, including db, frames and configuration
@@ -90,7 +94,7 @@ function OneBank3:OnInitialize()
 			DelayedUpdateBag()
 		end)
 
-        if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
+        if self.IsRetail then
         	self:RegisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED", UpdateBag)
             self:RegisterEvent("REAGENTBANK_PURCHASED", function()
                 self.depositReagentsButtons:Show()
@@ -128,7 +132,7 @@ function OneBank3:OnInitialize()
 		self:UnregisterEvent("PLAYERBANKSLOTS_CHANGED")
 		self:UnregisterEvent("ITEM_LOCK_CHANGED")
 
-        if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
+        if self.IsRetail then
 		    self:UnregisterEvent("REAGENTBANK_PURCHASED")
 		    self:UnregisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED")
         end
@@ -144,7 +148,7 @@ function OneBank3:OnInitialize()
 	self.sidebar.handler = self
 	self.frame.sidebar = self.sidebar
 
-    local sidebarRows = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE and 4 or 3
+    local sidebarRows = self.IsRetail and 4 or 3
 
 	self.sidebar:CustomizeFrame(self.db.profile)
 	self.sidebar:SetHeight(sidebarRows * self.rowHeight + self.bottomBorder + self.topBorder - 7)
@@ -169,7 +173,7 @@ function OneBank3:OnInitialize()
 				self.sidebar.buttons[b2ID] = button2
 			end
 
-            if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
+            if self.IsRetail then
                 local button = self:CreateBagButton(7, self.sidebar)
                 button:ClearAllPoints()
                 button:SetPoint("TOP", self.sidebar, "TOP", 0, 0 - 10 - (3 * self.rowHeight))
@@ -223,7 +227,7 @@ function OneBank3:OnInitialize()
 
 	self.purchase:Hide()
 
-    if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
+    if self.IsRetail then
         self.reagentBankButton = CreateFrame("CheckButton", nil, self.frame, "UIPanelButtonTemplate")
         self.reagentBankButton:SetPoint("BOTTOMLEFT", self.frame, "BOTTOMLEFT", 5, 5)
         self.reagentBankButton:SetText(L["Reagent Bank"])
@@ -375,7 +379,7 @@ function OneBank3:IsBagOpen(bag)
 end
 
 function OneBank3:CreateBagButton(bag, parent)
-    local frameType = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE and "ItemButton" or "CheckButton"
+    local frameType = self.IsRetail and "ItemButton" or "CheckButton"
 	local button = CreateFrame(frameType, "OneBankSBBag"..bag, parent, 'BankItemButtonBagTemplate')
 	local highlight = self:CreateButtonHighlight(button)
 	button:SetID(bag)
