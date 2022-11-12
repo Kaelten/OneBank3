@@ -18,7 +18,7 @@ function OneBank3:OnInitialize()
 	self.displayName = "OneBank3"
 	self.isBank = true
 
-	self.bankBagIndexes = {-1, 6, 7, 8, 9, 10, 11}
+	self.bankBagIndexes = {-1, 6, 7, 8, 9, 10, 11, 12}
 	self.reagentBankIndexes = {-3}
 
 	self.bagIndexes = self.bankBagIndexes
