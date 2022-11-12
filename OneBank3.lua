@@ -18,7 +18,7 @@ function OneBank3:OnInitialize()
 	self.displayName = "OneBank3"
 	self.isBank = true
 
-	self.bankBagIndexes = {-1, 5, 6, 7, 8, 9, 10, 11}
+	self.bankBagIndexes = {-1, 6, 7, 8, 9, 10, 11}
 	self.reagentBankIndexes = {-3}
 
 	self.bagIndexes = self.bankBagIndexes
@@ -31,11 +31,11 @@ function OneBank3:OnInitialize()
 	self.frame:CustomizeFrame(self.db.profile)
 	self.frame:SetSize(200, 200)
 
+
 	self.frame:SetScript("OnShow", function()
 		if not self.frame.slots then
 			self.frame.slots = {}
 		end
-
 		self:BuildFrame()
 		self:OrganizeFrame()
 		self:UpdateFrame()
@@ -385,23 +385,29 @@ function OneBank3:CreateBagButton(bag, parent)
 	button:SetID(bag)
 
 	button.GetContainerID = function(self)
-		return self:GetID() + ITEM_INVENTORY_BANK_BAG_OFFSET
+		return self:GetID() + ITEM_INVENTORY_BANK_BAG_OFFSET + 1
 	end
 
 	self:SecureHookScript(button, "OnEnter", function(button)
-		self:HighlightBagSlots(button:GetContainerID())
+		local numSlots, full = GetNumBankSlots()
+		local maxSlot = numSlots + ITEM_INVENTORY_BANK_BAG_OFFSET + 1
+		if (button:GetContainerID() <= maxSlot) then
+			self:HighlightBagSlots(button:GetContainerID())
+		end
 		highlight:Show()
 	end)
 
 	button:SetScript("OnLeave", function(button)
 		local index = button:GetContainerID()
-
-		if not self.frame.bags[index].checked then
-			self:UnhighlightBagSlots(index)
-			highlight:Hide()
-			self.frame.bags[index].colorLocked = false
-		else
-			self.frame.bags[index].colorLocked = true
+		local numSlots, full = GetNumBankSlots()
+		if (index <= (numSlots + ITEM_INVENTORY_BANK_BAG_OFFSET + 1)) then
+			if not self.frame.bags[index].checked then
+				self:UnhighlightBagSlots(index)
+				highlight:Hide()
+				self.frame.bags[index].colorLocked = false
+			else
+				self.frame.bags[index].colorLocked = true
+			end
 		end
 
 		GameTooltip:Hide()
@@ -412,7 +418,10 @@ function OneBank3:CreateBagButton(bag, parent)
 
 		if not haditem then
 			local index = button:GetContainerID()
-			self.frame.bags[index].checked = not self.frame.bags[index].checked
+			local numSlots, full = GetNumBankSlots()
+			if (index <= (numSlots + ITEM_INVENTORY_BANK_BAG_OFFSET + 1)) then
+				self.frame.bags[index].checked = not self.frame.bags[index].checked
+			end
 		end
 	end)
 

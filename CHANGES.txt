@@ -1,0 +1,10 @@
+lightweight tag 8ae590a605c314e04ab560e9c573e744b09606e6 v3.11.2
+Author:	Bryan McLemore <reygn@hey.com>
+Date:	Wed May 19 15:19:04 2021 -0700
+
+commit 8ae590a605c314e04ab560e9c573e744b09606e6
+Author: Bryan McLemore <reygn@hey.com>
+Date:   Wed May 19 15:19:04 2021 -0700
+
+    add 7th bank bag slot for BC
+

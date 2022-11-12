@@ -1,5 +1,25 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("OneBank3", "enUS", true, true)
 
---[===[@non-debug@
-@localization(locale="enUS", format="lua_additive_table", same-key-is-true=true)@
---@end-non-debug@]===]
+--@non-debug@
+L["%s's Bank Bags"] = true
+L["%s's Reagent Bank"] = true
+L["Bank Bag"] = true
+L["Deposit Reagents"] = true
+L["Fifth Bank Bag"] = true
+L["First Bank Bag"] = true
+L["Fourth Bank Bag"] = true
+L["Reagent Bank"] = true
+L["Second Bank Bag"] = true
+L["Seventh Bank Bag"] = true
+L["Sixth Bank Bag"] = true
+L["Specific Bag Filters"] = true
+L["Third Bank Bag"] = true
+L["Toggles the display of your Fifth Bank Bag."] = true
+L["Toggles the display of your First Bank Bag."] = true
+L["Toggles the display of your Fourth Bank Bag."] = true
+L["Toggles the display of your Second Bank Bag."] = true
+L["Toggles the display of your Seventh Bank Bag."] = true
+L["Toggles the display of your Sixth Bank Bag."] = true
+L["Toggles the display of your Third Bank Bag."] = true
+
+--@end-non-debug@
