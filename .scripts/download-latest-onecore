@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+mkdir -p libs
+curl -s https://api.github.com/repos/Kaelten/OneCore/releases/latest |
+    jq '.assets[] | select(.name | endswith(".zip")) | .browser_download_url' |
+    tr -d \" |
+    xargs curl -sL |
+    tar -xvf- -C libs

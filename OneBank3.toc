@@ -1,6 +1,9 @@
-## Interface: 90005
 ## Title: OneBank3
 ## Notes: OneBank3 will combine all the bank bags into one frame
+## Interface: 90005
+## Interface-BCC: 20501
+## Interface-Classic: 11307
+## X-Curse-Project-ID: 16781
 ## Author: Kaelten
 ## X-eMail: kaelten@gmail.com
 ## X-Category: Bags & Inventory
