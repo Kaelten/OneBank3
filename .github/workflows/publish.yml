@@ -21,6 +21,9 @@ jobs:
           args: "--no-color -q"
           annotate: warning
 
+      - name: download latest onecore
+        run: .scripts/download-latest-onecore
+
       - name: package and deploy
         uses: BigWigsMods/packager@v2
         env:
