@@ -4,7 +4,7 @@ OneBag has a long history of minimalism and OneBank3 will continue to uphold the
 
 Also in the vein of earlier iterations I've kept to the philosophy of doing as little work as possible, as a result the code base is very small, and most of it is in the OneCore library.  As of the time of writing there are only 365 lines of code unique to OneBank3, and only 1804 lines of code in OneCore itself.  LoC is a horrible stat in general, but it's fun none the less, and I cheat horribly since I build off the powerful [[http://www.wowace.com/projects/Ace3|Ace3 libraries]].
 
-===Features
+## Features
 * **Now with Search**
 * **Can now run completely independent of OneBag3**
 * Combines all of your bank bags into one.
@@ -19,7 +19,7 @@ Also in the vein of earlier iterations I've kept to the philosophy of doing as l
 * Full support for the Reagent Bank
 * Exposes WoW's built in bag sorting
 
-===Search Syntax
+## Search Syntax
 
 Search inside of OneBank3 is powered by the [[https://github.com/Jaliborc/LibItemSearch-1.2|LibItemSearch library by Jalibroc]].  As a result it supports many advanced search options.
 
@@ -61,12 +61,14 @@ Search inside of OneBank3 is powered by the [[https://github.com/Jaliborc/LibIte
 : [[http://wow.curse.com/downloads/wow-addons/details/onebag3.aspx|On Curse]]
 
 ===Localization
-Localization is powered by WowAce's built in translation system.  Please use the following links to contribute to localization.
-* [[http://www.wowace.com/projects/OneCore/localization/|OneCore]]
-* [[http://www.wowace.com/projects/OneBag3/localization/|OneBag3]]
-* [[http://www.wowace.com/projects/OneBank3/localization/|OneBank3]]
+Localization is powered by WowAce's translation system. Please use the following links
+to contribute to localization.  As of writing, this table shows the most recent status  
+for the OneBag3 Suite.
 
-===Bug Reports & Suggestions
-Please report all bug reports to [[http://www.wowace.com/projects/OneBank3/tickets|my tracker on WowAce]].
+|       Project | deDE  | esES | esMX | frFR | itIT | koKR | ptBR | ruRU | zhCN | zhTW |
+|--------------:|:-----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|
+|  [OneCore][1] | 14 NR | 100% | 5 NR | 100% |  0%  | 100% |  0%  | 100% | 100% | 100% |
+|  [OneBag3][2] | 100%  | 100% | 100% | 100% | 4 NR | 100% |  0%  | 100% | 100% | 100% |
+| [OneBank3][3] | 10 NR | 85%  | 85%  | 85%  | 90%  | 100% |  5%  | 3 NR | 100% | 100% |
 
 I want to thank all the users who've been using OneBag and OneBank for so long.
